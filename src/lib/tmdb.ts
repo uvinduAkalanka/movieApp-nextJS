@@ -15,23 +15,35 @@ const tmdb = axios.create({
     },
 });
 
-export const fetchTrendingMoviesOrTVShows = async (platform: MediaType):Promise<media[]> => {
-    const res = await tmdb.get(`/trending/${platform}/day`);
-    return res.data.results;
+export const fetchTrendingMoviesOrTVShows = async (platform: MediaType): Promise<media[]> => {
+    try {
+        const res = await tmdb.get(`/trending/${platform}/day`);
+        return res.data.results;
+    } catch (error) {
+        console.error(`Failed to fetch trending ${platform}:`, error);
+        return []; // or throw error depending on how you want to handle it upstream
+    }
 };
 
 export const fetchTopRatedMovieORTV = async (platform: MediaType): Promise<media[]> => {
-    const res = await tmdb.get(`/discover/${platform}`, {
-        params: {
-            include_adult: true,
-            language: "en-US",
-            page: 1,
-            sort_by: "vote_average.desc",
-            "vote_count.gte": 200,
-        },
-    });
-    return res.data.results;
+    try {
+        const res = await tmdb.get(`/discover/${platform}`, {
+            params: {
+                include_adult: true,
+                language: "en-US",
+                page: 1,
+                sort_by: "vote_average.desc",
+                "vote_count.gte": 200,
+            },
+        });
+
+        return res.data.results;
+    } catch (error) {
+        console.error(`Failed to fetch top-rated ${platform}:`, error);
+        return []; // or throw error, based on your use case
+    }
 };
+
 
 export const fetchGenres = async () => {
     const res = await tmdb.get('/genre/movie/list');
