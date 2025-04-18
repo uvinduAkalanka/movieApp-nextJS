@@ -1,7 +1,6 @@
 import {MovieList} from "@/components/MovieList";
 import {fetchTopRatedMovieORTV, fetchTrendingMoviesOrTVShows} from "@/lib/tmdb";
 import {MediaType} from "@/common/enums/media-type.enum";
-import BrowseFilterBar from "@/components/BrowseFilterBar";
 
 export default async function HomePage() {
     const trendingMovies = await fetchTrendingMoviesOrTVShows(MediaType.MOVIE);
@@ -13,7 +12,6 @@ export default async function HomePage() {
     return (
         <main>
             <div className={"h-full p-8 "}>
-                <BrowseFilterBar></BrowseFilterBar>
                 <MovieList title="Trending movies" medias={trendingMovies} />
                 <MovieList title="Trending tv shows" medias={trendingTVShows} />
                 <MovieList title="Top rated tv shows" medias={topRatedTVShows} />
